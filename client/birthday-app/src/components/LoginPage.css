@@ -1,0 +1,8 @@
+.login {
+    background-image: url(".././img/birthday_background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    margin: -2em;
+    padding: 2em;
+}
