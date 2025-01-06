@@ -31,6 +31,7 @@ const Header = () => {
         authContext.logout();
         navigate('/')
     };
+
     return (
         <>
             <Grid
@@ -63,15 +64,15 @@ const Header = () => {
                     </Tabs>
                 </Grid>
                 <Box
-                    component={Link}
-                    to="/"
+                    onClick={() => logout()}
                     sx={{
                         color: "primary.main",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
                         textDecoration: "none",
-                        marginRight: "10px"
+                        marginRight: "10px",
+                        cursor: "pointer",
                     }}
                 >
                     ИЗЛЕЗ

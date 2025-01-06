@@ -4,7 +4,6 @@ const Home = () => {
    
     return (
         <>
-      <Header/>
       <div>sfasfhak</div>
       </>);
 };

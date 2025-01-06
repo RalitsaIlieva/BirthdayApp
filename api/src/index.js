@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import passport from 'passport';
 import jwtStrategy from './auth/strategy.js';
 import employeesController from '../src/controllers/employees-controller.js';
+import votesController from './controllers/votes-controller.js';
 
 const app = express();
 passport.use(jwtStrategy);
@@ -11,6 +12,7 @@ passport.use(jwtStrategy);
 app.use(cors(), bodyParser.json());
 app.use(passport.initialize());
 app.use('/employees', employeesController);
+app.use('/votes', votesController);
 
 app.use((err, req, res, next) => {
   res.status(500).send({

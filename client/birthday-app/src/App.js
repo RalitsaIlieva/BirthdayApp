@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   AuthContext,
   getToken,
@@ -8,9 +8,8 @@ import {
   createLogout,
 } from './context/authContext';
 import './App.css';
+import Layout from './components/Layout';
 import LoginPage from './components/LoginPage';
-import Home from './components/Home';
-import CreateVote from './components/CreateVote';
 
 function App() {
   const [authValue, setLoginState] = useState({
@@ -30,14 +29,10 @@ function App() {
       >
         <BrowserRouter>
           <Routes>
-              <Route path='/' exact element={<LoginPage />} />
-            {authValue.isLoggedIn && (
-              <Route path='/home' element={<Home />} />
-            )}
-             {authValue.isLoggedIn && (
-              <Route path='/new' element={<CreateVote />} />
-            )}
-          </Routes>
+            <Route path='/' exact element={<LoginPage />} />
+            
+            </Routes>
+            <Layout />
         </BrowserRouter>
       </AuthContext.Provider>
     </>

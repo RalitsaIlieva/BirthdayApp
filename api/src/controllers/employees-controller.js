@@ -16,7 +16,7 @@ employeesController
       res.status(404).send({ message: 'Невалидно потребителско име/парола!' });
     } else {
       const payload = {
-        sub: employee.id,
+        id: employee.id,
         username: employee.username
       };
 

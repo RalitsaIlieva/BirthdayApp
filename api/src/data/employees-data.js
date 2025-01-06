@@ -25,7 +25,7 @@ const getUserPassword = async (username) => {
 
 const getAllEmployees = async (column, value) => {
     const sql = `
-      SELECT e.username, e.name, e.date_of_birth
+      SELECT e.id, e.username, e.name, e.date_of_birth
 FROM employees e
 LEFT JOIN votes v ON e.id = v.birthday_employee_id
 WHERE ${column} != ?
