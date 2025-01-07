@@ -58,9 +58,10 @@ const Header = () => {
                             },
                         }}
                     >
-                        <Tab label="Текущи гласувания" component={Link} to="/" />
+                        <Tab label="Текущи гласувания" component={Link} to="/votes" />
                         <Tab label="Приключили гласувания" component={Link} to="/" />
                         <Tab label="Създай гласуване" component={Link} to="/new" />
+                        <Tab label="Прекрати гласуване" component={Link} to="/myvotes" />
                     </Tabs>
                 </Grid>
                 <Box

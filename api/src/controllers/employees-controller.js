@@ -35,6 +35,25 @@ employeesController
     }
 
     res.status(200).send(employees);
+  })
+  .get('/votes', authMiddleware, async (req, res) => {
+    const username = req.user.username
+    const employees = await employeesService.getEmployeesWithActiveVotes(employeesData)(username);
+    if (!employees) {
+      return res.status(404).send([]);
+    }
+
+    res.status(200).send(employees);
+  })
+  .get('/votes/:id', authMiddleware, async (req, res) => {
+    const authorId = req.params.id;
+    const username = req.user.username
+    const employees = await employeesService.getEmployeesWithActiveVotes(employeesData)(username, authorId);
+    if (!employees) {
+      return res.status(404).send([]);
+    }
+
+    res.status(200).send(employees);
   });
 
 export default employeesController;

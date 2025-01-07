@@ -14,34 +14,12 @@ import { useNavigate } from "react-router-dom";
 import InputLabel from '@mui/material/InputLabel';
 import { AuthContext } from '../context/authContext';
 
-const EmployeeCard = ({ employee }) => {
+const CreateVoteForEmployeeCard = ({ employee }) => {
   const authContext = useContext(AuthContext);
   const { register, errors, handleSubmit, control } = useForm();
   const navigate = useNavigate();
   const [years, setYears] = useState([]);
-  const [year, setYear] = useState('');
-  const [votes, setVotes] = useState([]);
 
-  useEffect(() => {
-    fetch(`http://localhost:3006/votes`, {
-      headers: {
-        Authorization: `Bearer ${authContext.token}`,
-      },
-    })
-      .then((res) => Promise.all([res.status, res.json()]))
-      .then(([status, data]) => {
-        if (status === 404) {
-          return Promise.reject(data.message);
-        }
-        return data;
-      })
-      .then((data) => setVotes(data))
-      .catch((e) => alert(e));
-  }, [authContext.token]);
-
-  const handleChange = (event) => {
-    setYear(event.target.value);
-  };
   useEffect(() => {
     const next50Years = () => {
       const currentYear = new Date().getFullYear();
@@ -49,6 +27,7 @@ const EmployeeCard = ({ employee }) => {
     }
     setYears(next50Years());
   }, []);
+
   const onSubmit = (data) => {
     const payload = {year: data.year, user: authContext.user, employeeId: employee}
       fetch(`http://localhost:3006/votes`, {
@@ -60,39 +39,16 @@ const EmployeeCard = ({ employee }) => {
               },
             })
               .then((res) => res.json())
-              .then((createdVote) => {
-                console.log(createdVote)
-                setVotes((votes) => [...votes, createdVote[0]]);
-                alert('Успешно добавихте ново гласуване')
+              .then(() => {
+                alert('Успешно добавихте ново гласуване');
+                navigate('/home');
               })
               .catch((err) =>
                alert('Това гласуване вече е добавено')
             );
    
   };
-  const createVote = (data) => {
-    //     fetch(`${BASE_URL}/categories`, {
-    //       method: 'POST',
-    //       body: JSON.stringify(data),
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: `Bearer ${authContext.token}`,
-    //       },
-    //     })
-    //       .then((res) => res.json())
-    //       .then((createdCategory) => {
-    //         setCategories((categories) => [...categories, createdCategory[0]]);
-    //         toast.success('Успешно добавихте нова категория', {
-    //           position: toast.POSITION.TOP_CENTER,
-    //         });
-    //       })
-    //       .catch((err) =>
-    //         toast.warn('Тази категория вече е добавена', {
-    //           position: toast.POSITION.TOP_CENTER,
-    //         })
-    //       );
-    //   };
-  }
+  
   return (
     <>
       <form
@@ -134,4 +90,4 @@ const EmployeeCard = ({ employee }) => {
     </>);
 };
 
-export default EmployeeCard;
+export default CreateVoteForEmployeeCard;

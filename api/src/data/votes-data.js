@@ -40,21 +40,37 @@ const postNewVote = async (userId, employeeId, year) => {
       VALUES (?, ?, ?, 1);
       `;
 
-    await pool.query(sql, [userId, employeeId, year]);
+    const result = await pool.query(sql, [userId, employeeId, year]);
 
-    const sql2 = `
-    SELECT *
-    FROM votes
-    WHERE employeeId = ?
-    `;
-
-  const result = await pool.query(sql2, [employeeId]);
-  return result;
+    return result;
 }
 
+const postNewVoteForGift = async (voteId, userId, giftId) => {
+    const sql = `
+      INSERT votes_participants (vote_id, employee_id, voted_for_gift_id)
+      VALUES (?, ?, ?);
+      `;
+
+    const result = await pool.query(sql, [voteId, userId, giftId]);
+
+    return result;
+}
+const terminateVote = async (voteId) => {
+    const sql = `
+      UPDATE votes
+      SET is_active = 0
+      WHERE id = ?;
+      `;
+
+    const result = await pool.query(sql, [voteId]);
+
+    return result;
+}
 export default {
     getAllVotes,
     getBy,
     postNewVote,
-    isVoteFinished
+    isVoteFinished,
+    postNewVoteForGift,
+    terminateVote
 };

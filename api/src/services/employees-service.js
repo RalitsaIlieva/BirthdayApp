@@ -21,7 +21,29 @@ const getEmployees = (employeesData) => async (username) => {
     return result;
   };
 
+  const getEmployeesWithActiveVotes = (employeesData) => async (username) => {
+
+    const result = await employeesData.getEmployeesWithActiveVotes(username);
+  
+    if (!result[0]) {
+      return null;
+    }
+    return result;
+  };
+  
+  const getEmployeesByAuthorId = (employeesData) => async (username, authorId) => {
+
+    const result = await employeesData.getEmployeesByAuthorId(username, authorId);
+  
+    if (!result[0]) {
+      return null;
+    }
+    return result;
+  };
+
 export default {
     signInEmployee,
-    getEmployees
+    getEmployees,
+    getEmployeesWithActiveVotes,
+    getEmployeesByAuthorId
 };
