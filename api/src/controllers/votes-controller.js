@@ -10,12 +10,24 @@ const votesController = express.Router();
 
 votesController
     .get('/', authMiddleware, async (req, res) => {
-        const votes = await votesService.getVotes(votesData)();
-        if (!votes) {
-            return res.status(404).send([]);
-        }
+        const finished = req.query.finished;
+        if (finished === 'true') {
+            const userId = req.user.id;
+            const votes = await votesService.getFinishedVotes(votesData)(userId);
 
-        res.status(200).send(votes);
+            if (!votes) {
+                return res.status(404).send([]);
+            }
+
+            res.status(200).send(votes);
+        } else {
+            const votes = await votesService.getVotes(votesData)();
+            if (!votes) {
+                return res.status(404).send([]);
+            }
+
+            res.status(200).send(votes);
+        }
     })
     .post(
         '/',
@@ -61,7 +73,6 @@ votesController
         authMiddleware,
         async (req, res) => {
             const voteId = req.params.id;
-console.log(voteId)
             const vote = await votesService.terminateVote(votesData)(voteId);
 
             if (vote.message) {

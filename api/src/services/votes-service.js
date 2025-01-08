@@ -7,6 +7,15 @@ const getVotes = (votesData) => async () => {
     return result;
 };
 
+const getFinishedVotes = (votesData) => async (userId) => {
+    const result = await votesData.getFinishedVotes(userId);
+
+    if (!result[0]) {
+        return null;
+    }
+    return result;
+};
+
 const postVote = (votesData) => async (userId, employeeId, year) => {
     if (await votesData.getBy(employeeId, year)) {
         return { message: 'Гласуването за този рожден ден на този рожденик вече е създадено' };
@@ -33,8 +42,10 @@ const terminateVote = (votesData) => async (voteId) => {
 
     return await data;
 };
+
 export default {
     getVotes,
+    getFinishedVotes,
     postVote,
     postVoteForGift,
     terminateVote

@@ -5,6 +5,7 @@ import { AuthContext } from '../context/authContext';
 import CreateVoteTab from "./CreateVoteTab";
 import ActiveVotesTab from "./ActiveVotesTab";
 import TerminateVotesTab from "./TerminateVotesTab";
+import FinishedVotesTab from "./FinishedVotesTab";
 
 const Content = () => {
     const authContext = useContext(AuthContext);
@@ -21,6 +22,9 @@ const Content = () => {
             )}
             {authContext.isLoggedIn && (
                 <Route path='/myvotes' element={<TerminateVotesTab />} />
+            )}
+             {authContext.isLoggedIn && (
+                <Route path='/finished' element={<FinishedVotesTab />} />
             )}
         </Routes>)
 }
