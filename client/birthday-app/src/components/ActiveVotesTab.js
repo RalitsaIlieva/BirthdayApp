@@ -1,14 +1,17 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from '../context/authContext';
 import GiftVoteForEmployeeCard from "./GiftVoteForEmployeeCard";
 import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from "react-router-dom";
 
 const ActiveVotesTab = () => {
     const authContext = useContext(AuthContext);
     const [employees, setEmployees] = useState([]);
     const [gifts, setGifts] = useState([]);
+    const navigate = useNavigate();
+    const alertShownRef = useRef(false); 
 
     useEffect(() => {
         fetch(`http://localhost:3006/employees/votes`, {
@@ -18,12 +21,16 @@ const ActiveVotesTab = () => {
         })
             .then((res) => Promise.all([res.status, res.json()]))
             .then(([status, data]) => {
-                if (status === 404) {
-                    return Promise.reject(data.message);
+                if (status === 400) {
+                    if (!alertShownRef.current) {
+                        alert(data.message);  
+                        alertShownRef.current = true;  
+                    }
+                    navigate('/home');
+                } else {
+                    setEmployees(data); 
                 }
-                return data;
             })
-            .then((data) => setEmployees(data))
             .catch((e) => alert(e));
     }, [authContext.token]);
 

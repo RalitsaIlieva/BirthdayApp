@@ -40,7 +40,7 @@ employeesController
     const username = req.user.username
     const employees = await employeesService.getEmployeesWithActiveVotes(employeesData)(username);
     if (!employees) {
-      return res.status(404).send([]);
+      return res.status(400).send({ message: 'Няма активни гласувания' });
     }
 
     res.status(200).send(employees);
@@ -49,11 +49,13 @@ employeesController
     const authorId = req.params.id;
     const username = req.user.username
     const employees = await employeesService.getEmployeesWithActiveVotes(employeesData)(username, authorId);
-    if (!employees) {
-      return res.status(404).send([]);
-    }
 
-    res.status(200).send(employees);
+    if (!employees) {
+      return res.status(400).send({ message: 'Няма създадени от вас гласувания' });
+    }
+    else {
+      res.status(200).send(employees);
+    }
   });
 
 export default employeesController;

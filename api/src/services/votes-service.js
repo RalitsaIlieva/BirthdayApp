@@ -9,7 +9,14 @@ const getVotes = (votesData) => async () => {
 
 const getFinishedVotes = (votesData) => async (userId) => {
     const result = await votesData.getFinishedVotes(userId);
+    if (!result[0]) {
+        return null;
+    }
+    return result;
+};
 
+const getVotesParticipants = (votesData) => async (userId) => { 
+    const result = await votesData.getVotesParticipants(userId);
     if (!result[0]) {
         return null;
     }
@@ -48,5 +55,6 @@ export default {
     getFinishedVotes,
     postVote,
     postVoteForGift,
-    terminateVote
+    terminateVote,
+    getVotesParticipants
 };

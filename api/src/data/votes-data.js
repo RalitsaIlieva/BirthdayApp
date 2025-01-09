@@ -12,19 +12,50 @@ const getAllVotes = async () => {
 
 const getFinishedVotes = async (userId) => {
   const sql = `
-  SELECT vp.*, v.year, g.name AS gift_name, e.name AS voter_name, birthday_e.name AS birthday_employee_name
+ SELECT 
+  v.year, 
+  v.id,
+  g.name AS gift_name, 
+  e.name AS voter_name, 
+  birthday_e.name AS birthday_employee_name,
+  COUNT(vp.voted_for_gift_id) OVER (PARTITION BY v.birthday_employee_id, vp.voted_for_gift_id) AS gift_vote_count
 FROM votes_participants vp
 LEFT JOIN votes v ON vp.vote_id = v.id
 LEFT JOIN gifts g ON vp.voted_for_gift_id = g.id
 LEFT JOIN employees e ON vp.employee_id = e.id
 LEFT JOIN employees birthday_e ON v.birthday_employee_id = birthday_e.id
-WHERE v.birthday_employee_id != ? AND v.is_active = 0;
+WHERE v.birthday_employee_id != ? AND v.is_active = 0; 
   `;
 
   const result = await pool.query(sql, [userId]);
 
   return result;
 }
+
+const getVotesParticipants = async (userId) => {
+  const sql = `SELECT 
+    e.name AS voter_name,
+    v.id AS vote_id,
+    g.name AS gift_name
+FROM 
+    employees e
+LEFT JOIN 
+    votes_participants vp ON e.id = vp.employee_id
+LEFT JOIN 
+    votes v ON vp.vote_id = v.id
+LEFT JOIN 
+    gifts g ON vp.voted_for_gift_id = g.id
+LEFT JOIN 
+    employees birthday_e ON v.birthday_employee_id = birthday_e.id
+WHERE 
+    (v.birthday_employee_id != ? OR v.birthday_employee_id IS NULL)
+    AND (v.is_active = 0 OR v.is_active IS NULL);
+  `
+  const result = await pool.query(sql, [userId]);
+
+  return result;
+}
+
 const getBy = async (employeeId, year) => {
   const sql = `
       SELECT *
@@ -89,5 +120,6 @@ export default {
   postNewVote,
   isVoteFinished,
   postNewVoteForGift,
-  terminateVote
+  terminateVote,
+  getVotesParticipants
 };

@@ -17,10 +17,7 @@ app.use('/votes', votesController);
 app.use('/gifts', giftsController)
 
 app.use((err, req, res, next) => {
-  res.status(500).send({
-    message:
-      'An unexpected error occurred, our developers are working hard to resolve it.',
-  });
+  res.status(err.status || 500).json({ message: err.message || 'Server Error' });
 });
 
 app.all('*', (req, res) =>

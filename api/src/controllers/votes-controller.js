@@ -20,7 +20,17 @@ votesController
             }
 
             res.status(200).send(votes);
-        } else {
+        } else if (finished === 'all') {
+            const userId = req.user.id;
+            const votes = await votesService.getVotesParticipants(votesData)(userId);
+
+            if (!votes) {
+                return res.status(404).send([]);
+            }
+
+            res.status(200).send(votes);
+        }
+        else {
             const votes = await votesService.getVotes(votesData)();
             if (!votes) {
                 return res.status(404).send([]);
@@ -75,7 +85,7 @@ votesController
             const voteId = req.params.id;
             const vote = await votesService.terminateVote(votesData)(voteId);
 
-            if (vote.message) {
+            if (vote.message)  {
                 return res.status(404).send(vote.message);
             }
             return res.status(201).send(vote);
