@@ -15,8 +15,8 @@ const getFinishedVotes = (votesData) => async (userId) => {
     return result;
 };
 
-const getVotesParticipants = (votesData) => async (userId) => { 
-    const result = await votesData.getVotesParticipants(userId);
+const getVotesParticipants = (votesData) => async (voteId) => { 
+    const result = await votesData.getVotesParticipants(voteId);
     if (!result[0]) {
         return null;
     }
@@ -37,9 +37,14 @@ const postVote = (votesData) => async (userId, employeeId, year) => {
 };
 
 const postVoteForGift = (votesData) => async (voteId, userId, giftId) => {
-    
-        const data = await votesData.postNewVoteForGift(voteId, userId, giftId);
+    const userVotedOrNot = await votesData.userVotedOrNot(voteId, userId);
+    let data;
 
+    if (!userVotedOrNot.has_voted) {
+         data = await votesData.postNewVoteForGift(voteId, userId, giftId);
+    } else {    
+         data = await votesData.updateVoteForGift(voteId, userId, giftId);
+    }
         return await data;
 };
 

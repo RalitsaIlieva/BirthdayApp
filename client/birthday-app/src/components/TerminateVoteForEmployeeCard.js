@@ -7,11 +7,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import avatar from '../img/avatar.jpg';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
-import InputLabel from '@mui/material/InputLabel';
 import { AuthContext } from '../context/authContext';
 
 const TerminateVoteForEmployeeCard = ({ employee }) => {
@@ -39,7 +36,7 @@ const TerminateVoteForEmployeeCard = ({ employee }) => {
               .then((res) => res.json())
               .then(() => {
                 alert('Успешно прекратихте гласуване');
-                navigate('/home');
+                navigate('/votes');
               })
               .catch((err) =>
                alert('Нещо се обърка')

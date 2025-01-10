@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import Home from './Home';
 import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 import CreateVoteTab from "./CreateVoteTab";
@@ -11,9 +10,6 @@ const Content = () => {
     const authContext = useContext(AuthContext);
     return (
         <Routes>
-            {authContext.isLoggedIn && (
-                <Route path='/home' element={<Home />} />
-            )}
             {authContext.isLoggedIn && (
                 <Route path='/new' element={<CreateVoteTab />} />
             )}

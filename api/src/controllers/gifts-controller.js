@@ -1,7 +1,5 @@
 import express from 'express';
 import giftsService from '../services/gifts-service.js';
-// import { validator } from '../validators/validatorMiddleware.js';
-// import createUserSchema from '../validators/schemas/createUserSchema.js';
 import giftsData from '../data/gifts-data.js';
 import { authMiddleware } from '../auth/auth-middleware.js';
 

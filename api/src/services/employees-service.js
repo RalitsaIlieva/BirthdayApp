@@ -13,8 +13,8 @@ const signInEmployee = (employeesData) => async (username, password) => {
 
 const getEmployees = (employeesData) => async (username) => {
 
-    const result = await employeesData.getAllEmployees('username', username);
-  
+    const result = await employeesData.getAllEmployees(username);
+
     if (!result[0]) {
       return null;
     }

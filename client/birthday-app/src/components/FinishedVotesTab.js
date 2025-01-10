@@ -14,63 +14,37 @@ import VoteDetails from './VoteDetails';
 
 const FinishedVotesTab = () => {
   const [votes, setVotes] = useState([]);
-  const [allEmployees, setAllEmployees] = useState([]);
-  const [showVoteDetails, setShowVoteDetails] = useState(false)
+  const [selectedVoteId, setSelectedVoteId] = useState(null);
   const authContext = useContext(AuthContext);
-  const result = votes.reduce((acc, curr) => {
-    if (!acc[curr.birthday_employee_name] || curr.gift_vote_count > acc[curr.birthday_employee_name].gift_vote_count) {
-      acc[curr.birthday_employee_name] = {
-        year: curr.year,
-        gift_name: curr.gift_name,
-        birthday_employee_name: curr.birthday_employee_name,
-        gift_vote_count: curr.gift_vote_count
-      };
-    }
-    return acc;
-  }, {});
 
-  const finalResult = Object.values(result);
+  const handleButtonClick = (voteId) => {
+    setSelectedVoteId(voteId);
+  };
+
+  const handleBackButtonClick = () => {
+    setSelectedVoteId(null);  
+  };
+
   useEffect(() => {
     fetch(`http://localhost:3006/votes?finished=true`, {
       headers: {
         Authorization: `Bearer ${authContext.token}`,
       },
     })
-      .then((res) => Promise.all([res.status, res.json()]))
-      .then(([status, data]) => {
-        if (status === 404) {
-          return Promise.reject(data.message);
-        }
-        return data;
-      })
-      .then((data) => setVotes(data))
-      .catch((e) => alert(e));
-  }, [authContext.token]);
-
-  useEffect(() => {
-    fetch(`http://localhost:3006/votes?finished=all`, {
-      headers: {
-        Authorization: `Bearer ${authContext.token}`,
-      },
+    .then((res) => Promise.all([res.status, res.json()]))
+    .then(([status, data]) => {
+      if (status === 404) {
+        return Promise.reject(data.message);
+      }
+      return data;
     })
-      .then((res) => Promise.all([res.status, res.json()]))
-      .then(([status, data]) => {
-        if (status === 404) {
-          return Promise.reject(data.message);
-        }
-        return data;
-      })
-      .then((data) => setAllEmployees(data))
-      .catch((e) => alert(e));
+    .then((data) => setVotes(data))
+    .catch((e) => alert(e));
   }, [authContext.token]);
-  console.log(allEmployees)
-
-  const voteDetails = () => {
-    return (<VoteDetails />)
-  }
+  
   if (!votes.length) return <CircularProgress />;
-
-  return (!showVoteDetails? <TableContainer
+  
+  return (!selectedVoteId ? <TableContainer
     component={Paper}
     pt={5.5}
     pb={2}
@@ -87,28 +61,24 @@ const FinishedVotesTab = () => {
             <TableCell align="right" sx={{ fontWeight: "bold" }}>
               Подарък
             </TableCell>
-            <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              Печели с брой гласове
-            </TableCell>
             < TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
-          {finalResult.map((vote) => (
-            <TableRow key={vote.birthday_employee_name}>
+          {votes.map((vote) => (
+            <TableRow key={vote.employee_id}>
               <TableCell component="th" scope="row">
                 {vote.birthday_employee_name}
               </TableCell>
-              <TableCell align="right">{vote.year}</TableCell>
-              <TableCell align="right">{vote.gift_name}</TableCell>
-              <TableCell align="right">{vote.gift_vote_count}</TableCell>
-              <TableCell align="right"><Button size="small" variant="contained" onClick={() => setShowVoteDetails(!showVoteDetails)}>Детайли</Button></TableCell>
+              <TableCell align="right">{vote.vote_year}</TableCell>
+              <TableCell align="right">{vote.winning_gift ? vote.winning_gift : "Няма избран подарък"}</TableCell>
+              <TableCell align="right"><Button size="small" variant="contained" onClick={() => handleButtonClick(vote.vote_id)}>Детайли</Button></TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </Box>
-  </TableContainer> : <VoteDetails />)
+  </TableContainer> : <VoteDetails voteId={selectedVoteId} onBack={handleBackButtonClick}/>)
 };
 
 export default FinishedVotesTab;

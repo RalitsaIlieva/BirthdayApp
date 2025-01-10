@@ -29,26 +29,29 @@ const CreateVoteForEmployeeCard = ({ employee }) => {
   }, []);
 
   const onSubmit = (data) => {
-    const payload = {year: data.year, user: authContext.user, employeeId: employee}
-      fetch(`http://localhost:3006/votes`, {
-              method: 'POST',
-              body: JSON.stringify(payload),
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${authContext.token}`,
-              },
-            })
-              .then((res) => res.json())
-              .then(() => {
-                alert('Успешно добавихте ново гласуване');
-                navigate('/home');
-              })
-              .catch((err) =>
-               alert('Това гласуване вече е добавено')
-            );
-   
+    const payload = { year: data.year, user: authContext.user, employeeId: employee }
+    fetch(`http://localhost:3006/votes`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authContext.token}`,
+      },
+    })
+      .then((res) => Promise.all([res.status, res.json()]))
+      .then(([status, data]) => {
+        if (status === 400) {
+          alert(data.message);
+        } 
+        navigate('/votes');
+      })
+      .catch((err) => {
+        alert(err)
+      }
+      );
+
   };
-  
+
   return (
     <>
       <form

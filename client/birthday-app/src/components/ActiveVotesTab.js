@@ -23,10 +23,9 @@ const ActiveVotesTab = () => {
             .then(([status, data]) => {
                 if (status === 400) {
                     if (!alertShownRef.current) {
-                        alert(data.message);  
                         alertShownRef.current = true;  
                     }
-                    navigate('/home');
+                    navigate('/votes');
                 } else {
                     setEmployees(data); 
                 }
@@ -51,18 +50,23 @@ const ActiveVotesTab = () => {
             .catch((e) => alert(e));
     }, [authContext.token]);
 
-if (!employees.length || !gifts.length) return <CircularProgress />;
+if (!gifts.length) return <CircularProgress />;
 
     return (
-            <>
-                <Box sx={{ flexGrow: 1 }}>
-                    <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center'>
-                        {employees && employees.map((e, index) => <Grid item xs={2} sm={4} md={4} key={index}> <GiftVoteForEmployeeCard employee={e} />
-                        </Grid>)}
-                    </Grid>
-                </Box>
-            </>
-        )
+        <>
+            {!employees.length ? <Box boxShadow={3} mt={3} mb={14} pt={8} pb={8} pl={2} sx={{ backgroundColor: "white" }}>В момента няма активни гласувания</Box>
+            :
+                (<>
+                    <Box sx={{ flexGrow: 1 }}>
+                        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center'>
+                            {employees && employees.map((e, index) => <Grid item xs={2} sm={4} md={4} key={index}> <GiftVoteForEmployeeCard employee={e} />
+                            </Grid>)}
+                        </Grid>
+                    </Box>
+                </>)
+            }
+        </>
+    );
 };
 
 export default ActiveVotesTab;

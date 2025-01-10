@@ -1,7 +1,5 @@
 import express from 'express';
 import employeesService from '../services/employees-service.js';
-// import { validator } from '../validators/validatorMiddleware.js';
-// import createUserSchema from '../validators/schemas/createUserSchema.js';
 import employeesData from '../data/employees-data.js';
 import createToken from './../auth/create-token.js';
 import { authMiddleware } from '../auth/auth-middleware.js';
@@ -13,7 +11,7 @@ employeesController
     const { username, password } = req.body;
     const employee = await employeesService.signInEmployee(employeesData)(username, password);
     if (!employee) {
-      res.status(404).send({ message: 'Невалидно потребителско име/парола!' });
+      res.status(400).send({ message: 'Невалидно потребителско име/парола!' });
     } else {
       const payload = {
         id: employee.id,

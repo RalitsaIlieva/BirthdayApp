@@ -16,7 +16,11 @@ import { AuthContext } from '../context/authContext';
 
 const GiftVoteForEmployeeCard = ({ employee }) => {
     const authContext = useContext(AuthContext);
-    const { register, errors, handleSubmit, control } = useForm();
+    const { register, errors, handleSubmit, control, reset } = useForm({
+        defaultValues: {
+            name: ''
+        }
+    });
     const navigate = useNavigate();
     const [employees, setEmployees] = useState([]);
     const [gift, setGift] = useState('');
@@ -57,7 +61,7 @@ const GiftVoteForEmployeeCard = ({ employee }) => {
     }, [authContext.token]);
 
     const onSubmit = (data) => {
-        const gift = gifts.find(gift => gift.name === data.NAME);
+        const gift = gifts.find(gift => gift.NAME === data.name);
         const payload = { giftId: gift.Id, user: authContext.user, voteId: employee.id }
         fetch(`http://localhost:3006/votes/votes`, {
             method: 'POST',
@@ -70,20 +74,19 @@ const GiftVoteForEmployeeCard = ({ employee }) => {
             .then((res) => res.json())
             .then(() => {
                 alert('Успешно гласувахте');
-                navigate('/home');
+                reset({ name: '' })
             })
             .catch((err) =>
                 alert('Опитайте пак')
             );
     };
     if (!employees.length || !gifts.length) return null;
-   
+
     return (
         <div>
             <form
                 onSubmit={handleSubmit(onSubmit)}
             >
-
                 <Card sx={{ maxWidth: 345, textAlign: 'center' }}>
                     <CardMedia
                         sx={{ height: 170, backgroundSize: 'contain' }}
@@ -106,14 +109,14 @@ const GiftVoteForEmployeeCard = ({ employee }) => {
                                     onChange={onChange}
                                     sx={{ width: "100%" }}
                                 >
-                                    {gifts.map((gift) => <MenuItem value={gift.NAME}>{gift.NAME}</MenuItem>)}
+                                    {gifts.map((gift) => <MenuItem key={gift.NAME} value={gift.NAME}>{gift.NAME}</MenuItem>)}
                                 </Select>
                             </>
                             )}
                         />
                     </CardContent>
                     <CardActions>
-                        <Button type="submit" size="large" variant="contained" sx={{margin: "0 auto"}}>Гласувай</Button>
+                        <Button type="submit" size="large" variant="contained" sx={{ margin: "0 auto" }}>Гласувай</Button>
                     </CardActions>
                 </Card>
 

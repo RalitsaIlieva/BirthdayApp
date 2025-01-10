@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid2";
-import Alert from '@mui/material/Alert';
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
@@ -34,18 +33,17 @@ const LoginPage = ({ onLogin, role }) => {
     })
       .then((res) => Promise.all([res.status, res.json()]))
       .then(([status, user]) => {
-        if (status === 404) {
+        if (status === 400) {
+          
           return Promise.reject(user.message);
         }
         return user;
       })
       .then((user) => {
         authContext.setLoginState(user.token);
-        navigate('/home');
-        <Alert severity="success">Добре дошли.</Alert>
+        navigate('/votes');
       })
-      .catch((e) =>
-        <Alert severity="error">{e}</Alert>);
+      .catch(e =>alert(e));
 
     setValue('username', '');
     setValue('password', '');

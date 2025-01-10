@@ -26,7 +26,7 @@ const TerminateVotesTab = () => {
                         alert(data.message);  
                         alertShownRef.current = true;  
                     }
-                    navigate('/home');
+                    navigate('/votes');
                 } else {
                     setEmployees(data); 
                 }

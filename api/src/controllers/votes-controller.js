@@ -1,7 +1,5 @@
 import express from 'express';
 import votesService from '../services/votes-service.js';
-// import { validator } from '../validators/validatorMiddleware.js';
-// import createUserSchema from '../validators/schemas/createUserSchema.js';
 import votesData from '../data/votes-data.js';
 import createToken from './../auth/create-token.js';
 import { authMiddleware } from '../auth/auth-middleware.js';
@@ -20,15 +18,6 @@ votesController
             }
 
             res.status(200).send(votes);
-        } else if (finished === 'all') {
-            const userId = req.user.id;
-            const votes = await votesService.getVotesParticipants(votesData)(userId);
-
-            if (!votes) {
-                return res.status(404).send([]);
-            }
-
-            res.status(200).send(votes);
         }
         else {
             const votes = await votesService.getVotes(votesData)();
@@ -36,6 +25,17 @@ votesController
                 return res.status(404).send([]);
             }
 
+            res.status(200).send(votes);
+        }
+    })
+    .get('/:id', authMiddleware, async (req, res) => {
+        const voteId = req.params.id;
+        const votes = await votesService.getVotesParticipants(votesData)(voteId);
+
+        if (!votes) {
+            return res.status(404).send({ message: 'Няма детайли за това гласуване' });
+        }
+        else {
             res.status(200).send(votes);
         }
     })
@@ -52,10 +52,12 @@ votesController
                 employeeId,
                 year
             );
+
             if (vote.message) {
-                return res.status(404).send(vote.message);
+                return res.status(400).send({ message: vote.message });
+            } else {
+                return res.status(201).send(vote);
             }
-            return res.status(201).send(vote);
         },
     )
     .post(
@@ -71,7 +73,6 @@ votesController
                 userId,
                 giftId,
             );
-
             if (vote.message) {
                 return res.status(404).send(vote.message);
             }
@@ -85,7 +86,7 @@ votesController
             const voteId = req.params.id;
             const vote = await votesService.terminateVote(votesData)(voteId);
 
-            if (vote.message)  {
+            if (vote.message) {
                 return res.status(404).send(vote.message);
             }
             return res.status(201).send(vote);

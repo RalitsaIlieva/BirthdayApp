@@ -12,7 +12,6 @@ const jwtStrategy = new passportJwt.Strategy(options, async (payload, done) => {
     username: payload.username
   };
 
-  // userData will be set as `req.user` in the `next` middleware
   done(null, userData);
 });
 

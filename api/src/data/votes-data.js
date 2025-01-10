@@ -12,19 +12,23 @@ const getAllVotes = async () => {
 
 const getFinishedVotes = async (userId) => {
   const sql = `
- SELECT 
-  v.year, 
-  v.id,
-  g.name AS gift_name, 
-  e.name AS voter_name, 
-  birthday_e.name AS birthday_employee_name,
-  COUNT(vp.voted_for_gift_id) OVER (PARTITION BY v.birthday_employee_id, vp.voted_for_gift_id) AS gift_vote_count
-FROM votes_participants vp
-LEFT JOIN votes v ON vp.vote_id = v.id
-LEFT JOIN gifts g ON vp.voted_for_gift_id = g.id
-LEFT JOIN employees e ON vp.employee_id = e.id
-LEFT JOIN employees birthday_e ON v.birthday_employee_id = birthday_e.id
-WHERE v.birthday_employee_id != ? AND v.is_active = 0; 
+SELECT 
+    v.id AS vote_id,
+    v.year AS vote_year,
+    e.name AS birthday_employee_name,
+    (SELECT g.name
+     FROM Gifts g
+     JOIN Votes_Participants vp ON vp.voted_for_gift_id = g.id
+     WHERE vp.vote_id = v.id
+     GROUP BY g.id
+     ORDER BY COUNT(vp.id) DESC
+     LIMIT 1) AS winning_gift
+FROM 
+    Votes v
+    LEFT JOIN employees e ON v.birthday_employee_id = e.id
+WHERE 
+    v.is_active = 0
+    AND  v.birthday_employee_id != ?
   `;
 
   const result = await pool.query(sql, [userId]);
@@ -32,26 +36,22 @@ WHERE v.birthday_employee_id != ? AND v.is_active = 0;
   return result;
 }
 
-const getVotesParticipants = async (userId) => {
+const getVotesParticipants = async (voteId) => {
   const sql = `SELECT 
-    e.name AS voter_name,
-    v.id AS vote_id,
+    e.id AS employee_id,
+    e.name AS employee_name,
+    vp.vote_id AS vote_status,
     g.name AS gift_name
 FROM 
-    employees e
+    Employees e
 LEFT JOIN 
-    votes_participants vp ON e.id = vp.employee_id
+    Votes_Participants vp ON e.id = vp.employee_id AND vp.vote_id = ?
 LEFT JOIN 
-    votes v ON vp.vote_id = v.id
-LEFT JOIN 
-    gifts g ON vp.voted_for_gift_id = g.id
-LEFT JOIN 
-    employees birthday_e ON v.birthday_employee_id = birthday_e.id
+    gifts AS g ON vp.voted_for_gift_id = g.id
 WHERE 
-    (v.birthday_employee_id != ? OR v.birthday_employee_id IS NULL)
-    AND (v.is_active = 0 OR v.is_active IS NULL);
+    vp.vote_id = ? OR vp.vote_id IS NULL; 
   `
-  const result = await pool.query(sql, [userId]);
+  const result = await pool.query(sql, [voteId, voteId]);
 
   return result;
 }
@@ -102,6 +102,20 @@ const postNewVoteForGift = async (voteId, userId, giftId) => {
 
   return result;
 }
+const updateVoteForGift = async (voteId, userId, giftId) => {
+  const sql = `
+      UPDATE votes_participants
+SET 
+    voted_for_gift_id = ?
+WHERE 
+    vote_id = ?
+    AND employee_id = ?;
+      `;
+
+  const result = await pool.query(sql, [giftId, voteId, userId]);
+
+  return result;
+}
 const terminateVote = async (voteId) => {
   const sql = `
       UPDATE votes
@@ -113,6 +127,27 @@ const terminateVote = async (voteId) => {
 
   return result;
 }
+
+const userVotedOrNot = async (voteId, userId) => {
+  const sql = `
+      SELECT 
+    CASE
+        WHEN EXISTS (
+            SELECT 1
+            FROM votes_participants
+            WHERE vote_id = ?
+            AND employee_id = ?
+            AND voted_for_gift_id IS NOT NULL
+        ) THEN True
+        ELSE False
+    END AS has_voted;
+      `;
+
+  const result = await pool.query(sql, [voteId, userId]);
+
+  return result[0];
+};
+
 export default {
   getAllVotes,
   getFinishedVotes,
@@ -121,5 +156,7 @@ export default {
   isVoteFinished,
   postNewVoteForGift,
   terminateVote,
-  getVotesParticipants
+  getVotesParticipants,
+  userVotedOrNot,
+  updateVoteForGift
 };
