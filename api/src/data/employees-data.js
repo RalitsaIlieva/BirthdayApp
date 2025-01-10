@@ -23,18 +23,16 @@ const getUserPassword = async (username) => {
     return result[0];
 };
 
-const getAllEmployees = async (column, value) => {
-    const sql = `SELECT e.id, e.username, e.name, e.date_of_birth, v.created_by_employeeId
+const getAllEmployees = async (value) => {
+    const sql = `SELECT e.id, e.username, e.name, e.date_of_birth
 FROM employees e
-LEFT JOIN votes v ON e.id = v.birthday_employee_id
-WHERE ${column} != ?
-AND (v.is_active = 0 OR v.is_active IS NULL)
+LEFT JOIN votes v ON e.id = v.birthday_employee_id AND v.is_active = 1
+WHERE e.username != ?
 AND NOT EXISTS (
     SELECT 1
     FROM votes v2
-    WHERE v2.birthday_employee_id = e.id
-    AND v2.is_active = 1
-);
+    WHERE v2.birthday_employee_id = e.id AND v2.is_active = 1
+    )
 `;
     const result = await pool.query(sql, [value]);
 
