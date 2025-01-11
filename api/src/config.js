@@ -10,7 +10,6 @@ export const PORT = 3000;
 
 export const PRIVATE_KEY = 'your_secret_key';
 
-// 60 mins * 60 secs
 export const TOKEN_LIFETIME = 60 * 600;
 
 export const DEFAULT_USER_ROLE = '0';
