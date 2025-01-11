@@ -36,11 +36,11 @@ const VoteDetails = ({ voteId, onBack }) => {
             component={Paper}
             pt={5.5}
             pb={2}
-            sx={{ backgroundColor: "rgb(243 244 246)" }}
+            sx={{ backgroundColor: "rgb(243 244 246)", overflowX: 'auto' }}
         >
             <Box boxShadow={3} mt={3} mb={14} pt={8} pb={8} sx={{ backgroundColor: "white" }}>
             <Button size="large" variant="contained" sx={{marginLeft: "10px"}} onClick={onBack}>Back</Button>
-                <Table sx={{ minWidth: 650 }}>
+                <Table>
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{ fontWeight: "bold" }}>Служител</TableCell>
