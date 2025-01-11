@@ -43,7 +43,7 @@ const FinishedVotesTab = () => {
   }, [authContext.token]);
   
   if (!votes.length) return <CircularProgress />;
-  
+
   return (!selectedVoteId ? <TableContainer
     component={Paper}
     pt={5.5}
@@ -66,7 +66,7 @@ const FinishedVotesTab = () => {
         </TableHead>
         <TableBody>
           {votes.map((vote) => (
-            <TableRow key={vote.employee_id}>
+            <TableRow key={vote.vote_id}>
               <TableCell component="th" scope="row">
                 {vote.birthday_employee_name}
               </TableCell>

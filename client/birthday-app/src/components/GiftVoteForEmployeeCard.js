@@ -10,20 +10,17 @@ import avatar from '../img/avatar.jpg';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { useForm, Controller } from 'react-hook-form';
-import { useNavigate } from "react-router-dom";
 import InputLabel from '@mui/material/InputLabel';
 import { AuthContext } from '../context/authContext';
 
 const GiftVoteForEmployeeCard = ({ employee }) => {
     const authContext = useContext(AuthContext);
-    const { register, errors, handleSubmit, control, reset } = useForm({
+    const { handleSubmit, control, reset } = useForm({
         defaultValues: {
             name: ''
         }
     });
-    const navigate = useNavigate();
     const [employees, setEmployees] = useState([]);
-    const [gift, setGift] = useState('');
     const [gifts, setGifts] = useState([]);
 
     useEffect(() => {
@@ -97,13 +94,13 @@ const GiftVoteForEmployeeCard = ({ employee }) => {
                             {employee.name}
                         </Typography>
                         <Typography variant="body2">
-                            {employee.date_of_birth}
+                            {employee.date_of_birth} <br/> for {employee.year} year
                         </Typography>
                         <Controller
                             name="name"
                             control={control}
                             render={({ field: { onChange, value }, fieldState: { error } }) => (<>
-                                <InputLabel>Подарък</InputLabel>
+                                <InputLabel>Gift</InputLabel>
                                 <Select
                                     value={value}
                                     onChange={onChange}
@@ -116,7 +113,7 @@ const GiftVoteForEmployeeCard = ({ employee }) => {
                         />
                     </CardContent>
                     <CardActions>
-                        <Button type="submit" size="large" variant="contained" sx={{ margin: "0 auto" }}>Гласувай</Button>
+                        <Button type="submit" size="large" variant="contained" sx={{ margin: "0 auto" }}>Vote</Button>
                     </CardActions>
                 </Card>
 

@@ -29,6 +29,9 @@ FROM
 WHERE 
     v.is_active = 0
     AND  v.birthday_employee_id != ?
+    ORDER BY 
+    e.name ASC,     
+    v.year ASC; 
   `;
 
   const result = await pool.query(sql, [userId]);
@@ -49,7 +52,8 @@ LEFT JOIN
 LEFT JOIN 
     gifts AS g ON vp.voted_for_gift_id = g.id
 WHERE 
-    vp.vote_id = ? OR vp.vote_id IS NULL; 
+    vp.vote_id = ? OR vp.vote_id IS NULL ORDER BY 
+    e.name ASC; 
   `
   const result = await pool.query(sql, [voteId, voteId]);
 

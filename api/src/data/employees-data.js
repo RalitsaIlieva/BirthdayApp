@@ -44,7 +44,8 @@ const getEmployeesWithActiveVotes = async (value) => {
 FROM employees e
 LEFT JOIN votes v ON e.id = v.birthday_employee_id
 WHERE e.username != ?
-AND v.is_active = 1;`
+AND v.is_active = 1 ORDER BY 
+    e.name ASC;`
 
     const result = await pool.query(sql, [value]);
 

@@ -5,11 +5,13 @@ import CreateVoteTab from "./CreateVoteTab";
 import ActiveVotesTab from "./ActiveVotesTab";
 import TerminateVotesTab from "./TerminateVotesTab";
 import FinishedVotesTab from "./FinishedVotesTab";
+import LoginPage from "./LoginPage";
 
 const Content = () => {
     const authContext = useContext(AuthContext);
     return (
         <Routes>
+            <Route path='/' exact element={<LoginPage />} />
             {authContext.isLoggedIn && (
                 <Route path='/new' element={<CreateVoteTab />} />
             )}
@@ -19,7 +21,7 @@ const Content = () => {
             {authContext.isLoggedIn && (
                 <Route path='/myvotes' element={<TerminateVotesTab />} />
             )}
-             {authContext.isLoggedIn && (
+            {authContext.isLoggedIn && (
                 <Route path='/finished' element={<FinishedVotesTab />} />
             )}
         </Routes>)

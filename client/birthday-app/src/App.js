@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import {
   AuthContext,
   getToken,
@@ -9,7 +9,6 @@ import {
 } from './context/authContext';
 import './App.css';
 import Layout from './components/Layout';
-import LoginPage from './components/LoginPage';
 
 function App() {
   const [authValue, setLoginState] = useState({
@@ -28,11 +27,7 @@ function App() {
         }}
       >
         <BrowserRouter>
-          <Routes>
-            <Route path='/' exact element={<LoginPage />} />
-            
-            </Routes>
-            <Layout />
+          <Layout />
         </BrowserRouter>
       </AuthContext.Provider>
     </>

@@ -79,7 +79,7 @@ const CreateVoteForEmployeeCard = ({ employee }) => {
                   onChange={onChange}
                   sx={{ width: "100%" }}
                 >
-                  {years.map((year) => <MenuItem value={year}>{year}</MenuItem>)}
+                  {years.map(year => <MenuItem key={year} value={year}>{year}</MenuItem>)}
                 </Select>
               </>
               )}

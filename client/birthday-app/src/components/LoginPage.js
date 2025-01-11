@@ -4,13 +4,14 @@ import Grid from "@mui/material/Grid2";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { AuthContext } from '../context/authContext';
 import "./LoginPage.css";
 
-const LoginPage = ({ onLogin, role }) => {
+const LoginPage = () => {
   const {
     formState: { errors },
     control,
@@ -22,8 +23,7 @@ const LoginPage = ({ onLogin, role }) => {
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const authContext = useContext(AuthContext);
 
-  const onSubmit = (data) => {
-    const { username, password } = data;
+  const onSubmit = ({ username, password }) => {
     fetch(`http://localhost:3006/employees/login`, {
       body: JSON.stringify({ username, password }),
       method: 'POST',
@@ -34,7 +34,6 @@ const LoginPage = ({ onLogin, role }) => {
       .then((res) => Promise.all([res.status, res.json()]))
       .then(([status, user]) => {
         if (status === 400) {
-          
           return Promise.reject(user.message);
         }
         return user;
@@ -50,7 +49,7 @@ const LoginPage = ({ onLogin, role }) => {
   };
 
   return (
-    <div class="login">
+    <Box className="login">
       <Grid
         item
         sx={{ width: isDesktop ? "30%" : "80%", margin: "0 auto" }}
@@ -122,7 +121,7 @@ const LoginPage = ({ onLogin, role }) => {
           </Button>
         </form>
       </Grid>
-    </div>
+    </Box>
   );
 };
 
