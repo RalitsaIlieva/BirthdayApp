@@ -16,9 +16,10 @@ const Layout = () => {
     <>
       {authContext.isLoggedIn && <Header />}
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        {!authContext.isLoggedIn && <Route path="/" element={<LoginPage />} />}
         {authContext.isLoggedIn && (
           <>
+            <Route path="/" element={<ActiveVotesTab />} />
             <Route path="/new" element={<CreateVoteTab />} />
             <Route path="/votes" element={<ActiveVotesTab />} />
             <Route path="/myvotes" element={<TerminateVotesTab />} />
