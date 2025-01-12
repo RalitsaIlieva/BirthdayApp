@@ -61,7 +61,7 @@ const LoginPage = () => {
           mb={3}
           sx={{ fontWeight: "bold" }}
         >
-          Влизане
+          Log in
         </Typography>
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -74,7 +74,7 @@ const LoginPage = () => {
             spacing={2}
             sx={{ [theme.breakpoints.up("md")]: { marginTop: "4px" } }}
           >
-            <Typography mb={-1}>Потребителско име</Typography>
+            <Typography mb={-1}>Username</Typography>
             <Controller
               name="username"
               control={control}
@@ -91,7 +91,7 @@ const LoginPage = () => {
                 />
               )}
             />
-            <Typography mb={-1}>Парола</Typography>
+            <Typography mb={-1}>Password</Typography>
             <Controller
               name="password"
               control={control}
@@ -117,7 +117,7 @@ const LoginPage = () => {
             sx={{ marginTop: "15px", marginBottom: "15px", height: "3rem" }}
             fullWidth
           >
-            Влез
+            ENTER
           </Button>
         </form>
       </Grid>
