@@ -52,10 +52,10 @@ LEFT JOIN
 LEFT JOIN 
     gifts AS g ON vp.voted_for_gift_id = g.id
 WHERE 
-    vp.vote_id = ? OR vp.vote_id IS NULL ORDER BY 
-    e.name ASC; 
+   ( vp.vote_id = ? OR vp.vote_id IS NULL) AND e.id NOT IN (SELECT v1.birthday_employee_id FROM votes AS v1 WHERE v1.id = ?)
+	ORDER BY e.name ASC;
   `
-  const result = await pool.query(sql, [voteId, voteId]);
+  const result = await pool.query(sql, [voteId, voteId, voteId]);
 
   return result;
 }
