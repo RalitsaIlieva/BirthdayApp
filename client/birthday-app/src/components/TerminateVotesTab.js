@@ -10,10 +10,10 @@ const TerminateVotesTab = () => {
     const authContext = useContext(AuthContext);
     const [employees, setEmployees] = useState([]);
     const navigate = useNavigate();
-    const alertShownRef = useRef(false); 
+    const alertShownRef = useRef(false);
 
     useEffect(() => {
-    
+
         fetch(`http://localhost:3006/employees/votes/${authContext.user.id}`, {
             headers: {
                 Authorization: `Bearer ${authContext.token}`,
@@ -23,12 +23,12 @@ const TerminateVotesTab = () => {
             .then(([status, data]) => {
                 if (status === 400) {
                     if (!alertShownRef.current) {
-                        alert(data.message);  
-                        alertShownRef.current = true;  
+                        alert(data.message);
+                        alertShownRef.current = true;
                     }
                     navigate('/votes');
                 } else {
-                    setEmployees(data); 
+                    setEmployees(data);
                 }
             })
             .catch((e) => alert(e));
@@ -39,6 +39,7 @@ const TerminateVotesTab = () => {
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
+                <h2 style={{ textAlign: "center" }}>Terminate vote</h2>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center'>
                     {employees && employees.map((e, index) => <Grid item xs={2} sm={4} md={4} key={index}> <TerminateVoteForEmployeeCard employee={e} />
                     </Grid>)}

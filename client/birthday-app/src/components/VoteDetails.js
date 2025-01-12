@@ -43,9 +43,9 @@ const VoteDetails = ({ voteId, onBack }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ fontWeight: "bold" }}>Служител</TableCell>
+                            <TableCell sx={{ fontWeight: "bold" }}>Employee</TableCell>
                             <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                                Гласувал за
+                                Voted for
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -55,7 +55,7 @@ const VoteDetails = ({ voteId, onBack }) => {
                                 <TableCell component="th" scope="row">
                                     {vote.employee_name}
                                 </TableCell>
-                                <TableCell align="right">{vote.gift_name ? vote.gift_name : "Негласувал"}</TableCell>
+                                <TableCell align="right">{vote.gift_name ? vote.gift_name : "Didn`t vote"}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

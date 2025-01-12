@@ -15,7 +15,7 @@ const getFinishedVotes = (votesData) => async (userId) => {
     return result;
 };
 
-const getVotesParticipants = (votesData) => async (voteId) => { 
+const getVotesParticipants = (votesData) => async (voteId) => {
     const result = await votesData.getVotesParticipants(voteId);
     if (!result[0]) {
         return null;
@@ -38,18 +38,16 @@ const postVote = (votesData) => async (userId, employeeId, year) => {
 
 const postVoteForGift = (votesData) => async (voteId, userId, giftId) => {
     const userVotedOrNot = await votesData.userVotedOrNot(voteId, userId);
-    let data;
-
-    if (!userVotedOrNot.has_voted) {
-         data = await votesData.postNewVoteForGift(voteId, userId, giftId);
-    } else {    
-         data = await votesData.updateVoteForGift(voteId, userId, giftId);
-    }
+    if (userVotedOrNot.has_voted) {
+        return { message: 'Вече сте гласували' };
+    } else {
+        const data = await votesData.postNewVoteForGift(voteId, userId, giftId);
         return await data;
+    }
 };
 
 const terminateVote = (votesData) => async (voteId) => {
-    
+
     const data = await votesData.terminateVote(voteId);
 
     return await data;

@@ -1,7 +1,7 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid2";
 import Box from "@mui/material/Box";
@@ -15,15 +15,30 @@ const Header = () => {
     const authContext = useContext(AuthContext);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
+    const location = useLocation(); 
     const [value, setValue] = useState(0);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
     const logout = () => {
         localStorage.removeItem('token');
         authContext.logout();
-        navigate('/')
+        navigate('/');
     };
+
+    useEffect(() => {
+        if (location.pathname === "/votes") {
+            setValue(0);
+        } else if (location.pathname === "/finished") {
+            setValue(1);
+        } else if (location.pathname === "/new") {
+            setValue(2);
+        } else if (location.pathname === "/myvotes") {
+            setValue(3);
+        }
+    }, [location]); 
 
     return (
         <>
@@ -51,10 +66,10 @@ const Header = () => {
                             },
                         }}
                     >
-                        <Tab label="Текущи гласувания" component={Link} to="/votes" />
-                        <Tab label="Приключили гласувания" component={Link} to="/finished" />
-                        <Tab label="Създай гласуване" component={Link} to="/new" />
-                        <Tab label="Прекрати гласуване" component={Link} to="/myvotes" />
+                        <Tab label="Active votes" component={Link} to="/votes" />
+                        <Tab label="Finished votes" component={Link} to="/finished" />
+                        <Tab label="Create new vote" component={Link} to="/new" />
+                        <Tab label="Terminate vote" component={Link} to="/myvotes" />
                     </Tabs>
                 </Grid>
                 <Box
@@ -69,11 +84,12 @@ const Header = () => {
                         cursor: "pointer",
                     }}
                 >
-                    ИЗЛЕЗ
+                    LOGOUT
                 </Box>
             </Grid>
             <Divider />
-        </>);
+        </>
+    );
 };
 
 export default Header;

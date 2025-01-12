@@ -73,7 +73,7 @@ const CreateVoteForEmployeeCard = ({ employee }) => {
               name="year"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (<>
-                <InputLabel>За година</InputLabel>
+                <InputLabel>For year</InputLabel>
                 <Select
                   value={value}
                   onChange={onChange}
@@ -86,7 +86,7 @@ const CreateVoteForEmployeeCard = ({ employee }) => {
             />
           </CardContent>
           <CardActions>
-            <Button type="submit" size="large" variant="contained">Създай гласуване</Button>
+            <Button type="submit" size="large" variant="contained">Create vote</Button>
           </CardActions>
         </Card>
       </form >

@@ -8,7 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const CreateVoteTab = () => {
     const authContext = useContext(AuthContext);
-   
+
     const [employees, setEmployees] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -30,7 +30,7 @@ const CreateVoteTab = () => {
                 alert(e.message)
             );
     }, [authContext.token]);
-   
+
     if (!employees) return <CircularProgress />;
     const employeesPerPage = 3;
     const indexOfLastEmployee = currentPage * employeesPerPage;
@@ -46,6 +46,7 @@ const CreateVoteTab = () => {
     return (
         <>
             <Box sx={{ flexGrow: 1 }}>
+                <h2 style={{ textAlign: "center" }}>Create vote</h2>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center'>
                     {employees && currentEmployees.map((e, index) => <Grid item xs={2} sm={4} md={4} key={index}> <CreateVoteForEmployeeCard employee={e} />
                     </Grid>)}

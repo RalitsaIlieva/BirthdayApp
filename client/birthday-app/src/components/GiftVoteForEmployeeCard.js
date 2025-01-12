@@ -68,15 +68,21 @@ const GiftVoteForEmployeeCard = ({ employee }) => {
                 Authorization: `Bearer ${authContext.token}`,
             },
         })
-            .then((res) => res.json())
-            .then(() => {
-                alert('Успешно гласувахте');
+            .then((res) => Promise.all([res.status, res.json()]))
+            .then(([status, data]) => {
+                if (status === 400) {
+                    alert(data.message);
+                    reset({ name: '' });
+                    return;
+                }
+                alert("Гласувахте успешно");
                 reset({ name: '' })
             })
-            .catch((err) =>
-                alert('Опитайте пак')
-            );
+            .catch((err) => {
+                alert('Опитайте пак');
+            });
     };
+
     if (!employees.length || !gifts.length) return null;
 
     return (
@@ -94,7 +100,7 @@ const GiftVoteForEmployeeCard = ({ employee }) => {
                             {employee.name}
                         </Typography>
                         <Typography variant="body2">
-                            {employee.date_of_birth} <br/> for {employee.year} year
+                            {employee.date_of_birth} <br /> for {employee.year} year
                         </Typography>
                         <Controller
                             name="name"

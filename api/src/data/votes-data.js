@@ -106,20 +106,7 @@ const postNewVoteForGift = async (voteId, userId, giftId) => {
 
   return result;
 }
-const updateVoteForGift = async (voteId, userId, giftId) => {
-  const sql = `
-      UPDATE votes_participants
-SET 
-    voted_for_gift_id = ?
-WHERE 
-    vote_id = ?
-    AND employee_id = ?;
-      `;
 
-  const result = await pool.query(sql, [giftId, voteId, userId]);
-
-  return result;
-}
 const terminateVote = async (voteId) => {
   const sql = `
       UPDATE votes
@@ -162,5 +149,4 @@ export default {
   terminateVote,
   getVotesParticipants,
   userVotedOrNot,
-  updateVoteForGift
 };

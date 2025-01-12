@@ -62,11 +62,11 @@ const TerminateVoteForEmployeeCard = ({ employee }) => {
               {employee.date_of_birth}
             </Typography>
             <Typography gutterBottom variant="h5" component="div">
-              За {employee.year} година
+              For {employee.year} year
             </Typography>
           </CardContent>
           <CardActions>
-            <Button type="submit" size="large" variant="contained">Прекрати гласуване</Button>
+            <Button type="submit" size="large" variant="contained">Terminate vote</Button>
           </CardActions>
         </Card>
       </form >

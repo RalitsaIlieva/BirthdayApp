@@ -74,9 +74,10 @@ votesController
                 giftId,
             );
             if (vote.message) {
-                return res.status(404).send(vote.message);
+                return res.status(400).send({ message: vote.message });
+            } else {
+                return res.status(201).send(vote);
             }
-            return res.status(201).send(vote);
         },
     )
     .post(

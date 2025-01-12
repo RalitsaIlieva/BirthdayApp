@@ -54,12 +54,12 @@ const FinishedVotesTab = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>Рожденик</TableCell>
+            <TableCell sx={{ fontWeight: "bold" }}>Birthday of</TableCell>
             <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              За година
+              For year
             </TableCell>
             <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              Подарък
+              Gift
             </TableCell>
             < TableCell />
           </TableRow>
@@ -71,8 +71,8 @@ const FinishedVotesTab = () => {
                 {vote.birthday_employee_name}
               </TableCell>
               <TableCell align="right">{vote.vote_year}</TableCell>
-              <TableCell align="right">{vote.winning_gift ? vote.winning_gift : "Няма избран подарък"}</TableCell>
-              <TableCell align="right"><Button size="small" variant="contained" onClick={() => handleButtonClick(vote.vote_id)}>Детайли</Button></TableCell>
+              <TableCell align="right">{vote.winning_gift ? vote.winning_gift : "No gift chosen"}</TableCell>
+              <TableCell align="right"><Button size="small" variant="contained" onClick={() => handleButtonClick(vote.vote_id)}>Details</Button></TableCell>
             </TableRow>
           ))}
         </TableBody>
